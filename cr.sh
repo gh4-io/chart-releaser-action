@@ -20,7 +20,11 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+echo "PWD=" "$PWD"
+
 echo $GITHUB_PATH
+
+printenv
 
 DEFAULT_CHART_RELEASER_VERSION=v1.5.0
 
