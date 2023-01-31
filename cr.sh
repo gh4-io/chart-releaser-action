@@ -233,12 +233,16 @@ lookup_latest_tag() {
 
 filter_charts() {
     while read -r chart; do
-        [[ ! -d "$chart" ]] && continue
-        local file="$chart/Chart.yaml"
-        if [[ -f "$file" ]]; then
-            echo "$chart"
-        else
-           echo "WARNING: $file is missing, assuming that '$chart' is not a Helm chart. Skipping." 1>&2
+        if [[ -f "$chart" ]]; then
+            [[ ! "$charts" == "Chart.yaml" ]] && contine
+            echo "Root Contains Chart.yaml"
+        elif [[ -d "$chart" ]]; then
+            local file="$chart/Chart.yaml"
+            if [[ -f "$file" ]]; then
+                echo "$chart"
+            else
+               echo "WARNING: $file is missing, assuming that '$chart' is not a Helm chart. Skipping." 1>&2
+            fi
         fi
     done
 }
