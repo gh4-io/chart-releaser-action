@@ -20,12 +20,6 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-echo "PWD=" "$PWD"
-
-echo $GITHUB_PATH
-
-printenv
-
 DEFAULT_CHART_RELEASER_VERSION=v1.5.0
 
 show_help() {
@@ -243,7 +237,7 @@ filter_charts() {
     while read -r chart; do
         if [[ -f "$chart" ]]; then
             [[ ! "$chart" == "Chart.yaml" ]] && continue
-            echo "$GITHUB_PATH"
+            echo "$GITHUB_WORKSPACE"
         elif [[ -d "$chart" ]]; then
             local file="$chart/Chart.yaml"
             if [[ -f "$file" ]]; then
