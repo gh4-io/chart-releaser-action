@@ -237,7 +237,7 @@ filter_charts() {
     while read -r chart; do
         if [[ -f "$chart" ]]; then
             [[ ! "$chart" == "Chart.yaml" ]] && continue
-            echo "."
+            echo "./"
         elif [[ -d "$chart" ]]; then
             local file="$chart/Chart.yaml"
             if [[ -f "$file" ]]; then
