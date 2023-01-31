@@ -236,7 +236,7 @@ lookup_latest_tag() {
 filter_charts() {
     while read -r chart; do
         if [[ -f "$chart" ]]; then
-            [[ ! "$charts" == "Chart.yaml" ]] && continue
+            [[ ! "$chart" == "Chart.yaml" ]] && continue
             echo "Root Contains Chart.yaml"
         elif [[ -d "$chart" ]]; then
             local file="$chart/Chart.yaml"
