@@ -20,6 +20,8 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+echo $ENV
+
 DEFAULT_CHART_RELEASER_VERSION=v1.5.0
 
 show_help() {
