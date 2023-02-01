@@ -69,7 +69,7 @@ main() {
 
         echo "${changed_charts[@]}"
 
-        if ${{ false }}; then
+        if false; then
         if [[ -n "${changed_charts[*]}" ]]; then
             install_chart_releaser
 
@@ -183,6 +183,8 @@ parse_command_line() {
                 if [[ -n "${2:-}" ]]; then
                     root_chart="$2"
                     shift
+                fi
+                ;;
             *)
                 break
                 ;;
@@ -247,7 +249,7 @@ filter_charts() {
     while read -r chart; do
 
         ## if single chart option is applied only look for Chart.yaml at the root.
-        if [[ -n root_chart ]]; then
+        if [[ -n $root_chart ]]; then
             [[ ! -f "$chart" ]] && continue
             [[ ! "$chart" == "Chart.yaml" ]] && continue
             echo "$GITHUB_WORKSPACE"
