@@ -35,6 +35,7 @@ Usage: $(basename "$0") <options>
     -n, --install-dir        The Path to install the cr tool
     -i, --install-only       Just install the cr tool
     -s, --skip-packaging     Skip the packaging step (run your own packaging before using the releaser)
+    -R, --root-chart         Single chart repository with the Chart.yaml in the root directory
 EOF
 }
 
@@ -47,6 +48,7 @@ main() {
     local install_dir=
     local install_only=
     local skip_packaging=
+    local root_chart=
 
     parse_command_line "$@"
 
@@ -65,6 +67,9 @@ main() {
         local changed_charts=()
         readarray -t changed_charts <<< "$(lookup_changed_charts "$latest_tag")"
 
+        echo "${changed_charts[@]}"
+
+        if ${{ false }}; then
         if [[ -n "${changed_charts[*]}" ]]; then
             install_chart_releaser
 
@@ -86,6 +91,7 @@ main() {
             update_index
         else
             echo "Nothing to do. No chart changes detected."
+        fi
         fi
     else
         install_chart_releaser
@@ -173,6 +179,10 @@ parse_command_line() {
                     shift
                 fi
                 ;;
+            -R|--root-chart)
+                if [[ -n "${2:-}" ]]; then
+                    root_chart="$2"
+                    shift
             *)
                 break
                 ;;
@@ -228,22 +238,29 @@ install_chart_releaser() {
 lookup_latest_tag() {
     git fetch --tags > /dev/null 2>&1
 
-    if ! git describe --tags --abbrev=0 2> /dev/null; then
+    if ! git describe --tags --abbrev=0 HEAD~ 2> /dev/null; then
         git rev-list --max-parents=0 --first-parent HEAD
     fi
 }
 
 filter_charts() {
     while read -r chart; do
-        if [[ -f "$chart" ]]; then
+
+        ## if single chart option is applied only look for Chart.yaml at the root.
+        if [[ -n root_chart ]]; then
+            [[ ! -f "$chart" ]] && continue
             [[ ! "$chart" == "Chart.yaml" ]] && continue
             echo "$GITHUB_WORKSPACE"
-        elif [[ -d "$chart" ]]; then
+            break
+
+        ## cycle though all directories and look for Chart.yaml inside.
+        else
+            [[ ! -d "$chart" ]] && continue
             local file="$chart/Chart.yaml"
             if [[ -f "$file" ]]; then
                 echo "$chart"
             else
-               echo "WARNING: $file is missing, assuming that '$chart' is not a Helm chart. Skipping." 1>&2
+                echo "WARNING: $file is missing, assuming that '$chart' is not a Helm chart. Skipping." 1>&2
             fi
         fi
     done
@@ -259,6 +276,7 @@ lookup_changed_charts() {
     local fields="1-${depth}"
 
     cut -d '/' -f "$fields" <<< "$changed_files" | uniq | filter_charts
+
 }
 
 package_chart() {
