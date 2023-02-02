@@ -179,7 +179,6 @@ parse_command_line() {
                 ;;
             -R|--root-chart)
                 root_chart=true
-                shift
                 ;;
             *)
                 break
