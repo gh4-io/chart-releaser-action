@@ -26,7 +26,7 @@ inputs:
     description: "skip the packaging option (do your custom packaging before running this action"
     required: false
   root_chart:
-    description: ""
+    description: "describes single root chart"
     required: false
 
 runs:
