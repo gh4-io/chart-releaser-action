@@ -179,7 +179,7 @@ parse_command_line() {
                 ;;
             -R|--root-chart)
                 if [[ -n "${2:-}" ]]; then
-                    root_chart="$2"
+                    root_chart=true
                     shift
                 fi
                 ;;
@@ -247,7 +247,7 @@ filter_charts() {
     while read -r chart; do
 
         ## if single chart option is applied only look for Chart.yaml at the root.
-        if [[ -n $root_chart && $root_chart == "true" ]]; then
+        if [[ -n $root_chart && $root_chart == true ]]; then
             [[ ! -f "$chart" ]] && continue
             [[ ! "$chart" == "Chart.yaml" ]] && continue
             echo "$GITHUB_WORKSPACE"
