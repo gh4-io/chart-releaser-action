@@ -48,7 +48,7 @@ main() {
     local install_dir=
     local install_only=
     local skip_packaging=
-    local root_chart=
+    local root_chart=0
 
     parse_command_line "$@"
 
@@ -245,7 +245,7 @@ filter_charts() {
     while read -r chart; do
 
         ## if single chart option is applied only look for Chart.yaml at the root.
-        if [[ -n $root_chart && $root_chart == true ]]; then
+        if [[ $root_chart == true ]]; then
             [[ ! -f "$chart" ]] && continue
             [[ ! "$chart" == "Chart.yaml" ]] && continue
             echo "$GITHUB_WORKSPACE"
