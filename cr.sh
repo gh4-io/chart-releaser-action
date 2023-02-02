@@ -67,9 +67,7 @@ main() {
         local changed_charts=()
         readarray -t changed_charts <<< "$(lookup_changed_charts "$latest_tag")"
 
-        echo "${changed_charts[@]}"
 
-        if false; then
         if [[ -n "${changed_charts[*]}" ]]; then
             install_chart_releaser
 
@@ -92,7 +90,7 @@ main() {
         else
             echo "Nothing to do. No chart changes detected."
         fi
-        fi
+        
     else
         install_chart_releaser
         rm -rf .cr-index
@@ -249,7 +247,7 @@ filter_charts() {
     while read -r chart; do
 
         ## if single chart option is applied only look for Chart.yaml at the root.
-        if [[ -n $root_chart ]]; then
+        if [[ -n $root_chart && $root_chart == "true" ]]; then
             [[ ! -f "$chart" ]] && continue
             [[ ! "$chart" == "Chart.yaml" ]] && continue
             echo "$GITHUB_WORKSPACE"
