@@ -178,10 +178,8 @@ parse_command_line() {
                 fi
                 ;;
             -R|--root-chart)
-                if [[ -n "${2:-}" ]]; then
-                    root_chart=true
-                    shift
-                fi
+                root_chart=1
+                shift
                 ;;
             *)
                 break
