@@ -48,7 +48,7 @@ main() {
     local install_dir=
     local install_only=
     local skip_packaging=
-    local root_chart=0
+    local root_chart=false
 
     parse_command_line "$@"
 
@@ -178,7 +178,7 @@ parse_command_line() {
                 fi
                 ;;
             -R|--root-chart)
-                root_chart=1
+                root_chart=true
                 shift
                 ;;
             *)
